@@ -1,20 +1,18 @@
-@use "@/assets/scss/base/media" as *;
+.dark {
+  color-scheme: dark;
 
-@media ($OSdark) {
-  html {
-    color-scheme: dark;
+  --text-1: hsl(0, 0, 100%);
+  --text-2: hsl(221, 14%, 31%);
 
-    --brand: var(--indigo-4);
+  --surface-1: hsl(268, 75%, 9%); // main background
+  --surface-2: hsl(268, 71%, 12%); // toggle background, keypad background
+  --surface-3: hsl(268, 71%, 12%); // screen background
+  --surface-4: hsl(281, 89%, 26%); // key background, toggle
+  --shadow-color: hsl(285, 91%, 52%); // key shadow
 
-    --link: var(--indigo-3);
-    --link-visited: var(--grape-3);
+  --surface-contrast: hsl(176, 100%, 44%);
+  --shadow-contrast: hsl(177, 92%, 70%);
 
-    --text-1: var(--gray-1);
-    --text-2: var(--gray-4);
-
-    --surface-1: var(--gray-9);
-    --surface-2: var(--gray-8);
-    --surface-3: var(--gray-7);
-    --surface-4: var(--gray-6);
-  }
+  --key: hsl(268, 47%, 21%);
+  --key-shadow: hsl(290, 70%, 36%);
 }
