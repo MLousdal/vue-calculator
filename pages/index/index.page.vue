@@ -1,12 +1,11 @@
 <script setup>
-import Link from '@/renderer/Link.vue'
-import { computed, reactive } from 'vue'
-import { useHead } from '@vueuse/head'
+import { computed, reactive, onMounted, ref } from "vue";
+import { useHead } from "@vueuse/head";
 
 const siteData = reactive({
-  title: `Home page`,
-  description: `Home page description`,
-})
+  title: `Vue Calculator`,
+  description: `Frontend Mentor Challenge`,
+});
 
 useHead({
   // Can be static or computed
@@ -17,19 +16,113 @@ useHead({
       content: computed(() => siteData.description),
     },
   ],
-})
+});
+
+const themeSelector = ref(null);
+
+let state = reactive({ output: "", oldNum: 0, newNum: "", sum: 0 });
+
+onMounted(() => {
+  let body = document.body;
+
+  themeSelector.value.addEventListener("change", () => {
+    if (themeSelector.value.value == 1) {
+      body.classList.remove("dark", "light");
+      body.classList.add("blue");
+    }
+    if (themeSelector.value.value == 2) {
+      body.classList.remove("dark", "blue");
+      body.classList.add("light");
+    }
+    if (themeSelector.value.value == 3) {
+      body.classList.remove("blue", "light");
+      body.classList.add("dark");
+    }
+  });
+});
+
+function addNum(e) {
+  state.newNum += e.target.value;
+}
+
+function addOperator(e) {
+  console.log(state.sum, state.oldNum, state.newNum);
+
+  switch (e.target.value) {
+    case "+":
+      state.oldNum = state.oldNum + parseFloat(state.newNum);
+      break;
+    case "-":
+      state.oldNum = state.oldNum - parseFloat(state.newNum);
+      break;
+    case "*":
+      state.oldNum = state.oldNum * parseFloat(state.newNum);
+      break;
+    case "/":
+      state.oldNum = state.oldNum / parseFloat(state.newNum);
+      break;
+    default:
+      break;
+  }
+
+  state.sum = state.oldNum;
+  state.newNum = "";
+}
+
+function reset() {
+  state.output = "";
+  state.oldNum = 0;
+  state.newNum = "";
+  state.sum = 0;
+}
+
+function del() {
+  state.newNum = state.newNum.slice(0, -1);
+}
+
+function calculate() {
+  state.newNum = state.sum;
+}
 </script>
 
 <template>
-  <main class="wrapper preview">
-    <img alt="Vue logo" src="@/assets/logo.svg" />
+  <main class="wrapper calculator">
     <header>
-      <h1>Home page!</h1>
-      <p class="text-5">Vite + Vue 3 + Vite-plugin-ssr + Open-props</p>
+      <p class="text-5">calc</p>
+      <div class="theme-slider">
+        <p class="text-1">THEME</p>
+        <div class="theme-numbers-container">
+          <div class="theme-numbers">
+            <p>1</p>
+            <p>2</p>
+            <p>3</p>
+          </div>
+          <input ref="themeSelector" type="range" min="1" max="3" :value="1" />
+        </div>
+      </div>
     </header>
-    <nav>
-      <Link href="/about">About page</Link>
-      <Link href="/open-props">OpenProps Page</Link>
-    </nav>
+    <output>
+      {{ state.newNum.length == 0 ? "0" : state.newNum }}
+    </output>
+    <section class="keyboard">
+      <button value="7" @click="addNum">7</button>
+      <button value="8" @click="addNum">8</button>
+      <button value="9" @click="addNum">9</button>
+      <button class="del" @click="del">DEL</button>
+      <button value="4" @click="addNum">4</button>
+      <button value="5" @click="addNum">5</button>
+      <button value="6" @click="addNum">6</button>
+      <button value="+" @click="addOperator">+</button>
+      <button value="1" @click="addNum">1</button>
+      <button value="2" @click="addNum">2</button>
+      <button value="3" @click="addNum">3</button>
+      <button value="-" @click="addOperator">-</button>
+      <button value="." @click="addNum">.</button>
+      <button value="0" @click="addNum">0</button>
+      <button value="/" @click="addOperator">/</button>
+      <button value="*" @click="addOperator">x</button>
+      <button class="reset" @click="reset">RESET</button>
+      <button class="equal" @click="calculate">=</button>
+    </section>
   </main>
 </template>

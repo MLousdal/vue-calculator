@@ -2,7 +2,7 @@ import { renderToString } from '@vue/server-renderer'
 import { escapeInject, dangerouslySkipEscape } from 'vite-plugin-ssr'
 import { createApp } from './app'
 import { createHead } from '@vueuse/head'
-import logoUrl from '@/assets/logo.svg'
+import logoUrl from '@/assets/favicon-32x32.png'
 
 export { render }
 // See https://vite-plugin-ssr.com/data-fetching
@@ -28,7 +28,7 @@ async function render(pageContext) {
         <meta name="description" content="${desc}" />
         <title>${title}</title>
       </head>
-      <body>
+      <body class="blue">
         <div id="app">${dangerouslySkipEscape(appHtml)}</div>
       </body>
     </html>`

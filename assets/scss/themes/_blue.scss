@@ -1,8 +1,9 @@
 .blue {
   color-scheme: light;
 
-  --text-1: hsl(0, 0, 100%);
+  --text-1: hsl(0, 0%, 100%);
   --text-2: hsl(221, 14%, 31%);
+  --white: hsl(0, 0%, 100%);
 
   --surface-1: hsl(222, 26%, 31%); // main background
   --surface-2: hsl(223, 31%, 20%); // toggle background, keypad background
