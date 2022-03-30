@@ -48,14 +48,17 @@ function changeTheme(value = themeSelector.value.value) {
   if (value == 1) {
     body.classList.remove("dark", "light");
     body.classList.add("blue");
+    state.theme = 1;
   }
   if (value == 2) {
     body.classList.remove("dark", "blue");
     body.classList.add("light");
+    state.theme = 2;
   }
   if (value == 3) {
     body.classList.remove("blue", "light");
     body.classList.add("dark");
+    state.theme = 3;
   }
 }
 
