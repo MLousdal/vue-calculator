@@ -20,7 +20,11 @@ useHead({
 
 const themeSelector = ref(null);
 
-let state = reactive({ output: "", oldNum: 0, newNum: "", sum: 0 });
+let state = reactive({
+  currentNumber: "",
+  sum: 0,
+  operator: null,
+});
 
 onMounted(() => {
   let body = document.body;
@@ -42,46 +46,43 @@ onMounted(() => {
 });
 
 function addNum(e) {
-  state.newNum += e.target.value;
+  if (state.currentNumber == state.sum) state.currentNumber = "";
+  state.currentNumber += e.target.value;
 }
 
 function addOperator(e) {
-  console.log(state.sum, state.oldNum, state.newNum);
+  state.operator = e.target.value;
 
-  switch (e.target.value) {
-    case "+":
-      state.oldNum = state.oldNum + parseFloat(state.newNum);
-      break;
-    case "-":
-      state.oldNum = state.oldNum - parseFloat(state.newNum);
-      break;
-    case "*":
-      state.oldNum = state.oldNum * parseFloat(state.newNum);
-      break;
-    case "/":
-      state.oldNum = state.oldNum / parseFloat(state.newNum);
-      break;
-    default:
-      break;
-  }
+  state.sum = calculate();
 
-  state.sum = state.oldNum;
-  state.newNum = "";
+  state.currentNumber = "";
+  console.log(state.sum);
 }
 
 function reset() {
-  state.output = "";
-  state.oldNum = 0;
-  state.newNum = "";
+  state.currentNumber = "";
   state.sum = 0;
+  state.operator = null;
 }
 
 function del() {
-  state.newNum = state.newNum.slice(0, -1);
+  state.currentNumber = state.currentNumber.slice(0, -1);
 }
 
-function calculate() {
-  state.newNum = state.sum;
+function equal() {
+  state.sum = calculate();
+  state.currentNumber = state.sum;
+}
+
+function calculate(operator = state.operator) {
+  if (operator == "+") return state.sum + parseFloat(state.currentNumber);
+  if (state.sum !== 0) {
+    if (operator == "-") return state.sum - parseFloat(state.currentNumber);
+  } else {
+    return parseFloat(state.currentNumber);
+  }
+  if (operator == "*") return state.sum * parseFloat(state.currentNumber);
+  if (operator == "/") return state.sum / parseFloat(state.currentNumber);
 }
 </script>
 
@@ -102,7 +103,7 @@ function calculate() {
       </div>
     </header>
     <output>
-      {{ state.newNum.length == 0 ? "0" : state.newNum }}
+      {{ state.currentNumber.length == 0 ? "0" : state.currentNumber }}
     </output>
     <section class="keyboard">
       <button value="7" @click="addNum">7</button>
@@ -122,7 +123,7 @@ function calculate() {
       <button value="/" @click="addOperator">/</button>
       <button value="*" @click="addOperator">x</button>
       <button class="reset" @click="reset">RESET</button>
-      <button class="equal" @click="calculate">=</button>
+      <button class="equal" @click="equal">=</button>
     </section>
   </main>
 </template>
