@@ -21,29 +21,43 @@ useHead({
 const themeSelector = ref(null);
 
 let state = reactive({
+  theme: 1,
   currentNumber: "",
   sum: 0,
   operator: null,
 });
 
 onMounted(() => {
+  const userPrefersDark =
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+  const userPrefersLight =
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: light)").matches;
+
+  if (userPrefersDark) state.theme = 3;
+  if (userPrefersLight) state.theme = 1;
+
+  changeTheme(state.theme);
+});
+
+function changeTheme(value = themeSelector.value.value) {
   let body = document.body;
 
-  themeSelector.value.addEventListener("change", () => {
-    if (themeSelector.value.value == 1) {
-      body.classList.remove("dark", "light");
-      body.classList.add("blue");
-    }
-    if (themeSelector.value.value == 2) {
-      body.classList.remove("dark", "blue");
-      body.classList.add("light");
-    }
-    if (themeSelector.value.value == 3) {
-      body.classList.remove("blue", "light");
-      body.classList.add("dark");
-    }
-  });
-});
+  if (value == 1) {
+    body.classList.remove("dark", "light");
+    body.classList.add("blue");
+  }
+  if (value == 2) {
+    body.classList.remove("dark", "blue");
+    body.classList.add("light");
+  }
+  if (value == 3) {
+    body.classList.remove("blue", "light");
+    body.classList.add("dark");
+  }
+}
 
 function addNum(e) {
   if (state.currentNumber == state.sum) state.currentNumber = "";
@@ -98,7 +112,14 @@ function calculate(operator = state.operator) {
             <p>2</p>
             <p>3</p>
           </div>
-          <input ref="themeSelector" type="range" min="1" max="3" :value="1" />
+          <input
+            ref="themeSelector"
+            type="range"
+            min="1"
+            max="3"
+            :value="state.theme"
+            @change="changeTheme(value)"
+          />
         </div>
       </div>
     </header>
