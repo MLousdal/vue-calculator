@@ -27,7 +27,7 @@ Users should be able to:
 
 ### Links
 
-- Live Site URL: [Add live site URL here](https://vue-calculator-sable.vercel.app/)
+- Live Site URL: [Vercel](https://vue-calculator-sable.vercel.app/)
 
 ### Built with
 
