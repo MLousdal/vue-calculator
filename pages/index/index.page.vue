@@ -142,6 +142,11 @@ function reset() {
 
 function del() {
   if (state.display === state.sum) return;
+  if (state.currentNumber.length == 1) {
+    state.currentNumber = "0";
+    updateDisplay();
+    return;
+  }
 
   state.currentNumber = state.currentNumber.slice(0, -1);
   updateDisplay();
