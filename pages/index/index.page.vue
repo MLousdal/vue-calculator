@@ -41,6 +41,7 @@ onMounted(() => {
   if (userPrefersLight) state.theme = 2;
 
   changeTheme(state.theme);
+  updateDisplay();
 });
 
 function changeTheme(value = themeSelector.value.value) {
@@ -64,39 +65,38 @@ function changeTheme(value = themeSelector.value.value) {
 }
 
 function addNum(e) {
-  if (state.currentNumber == state.sum) state.currentNumber = "";
+  if (state.display === state.sum) return;
+
   state.currentNumber += e.target.value;
-  state.display = `${state.sum == 0 ? "" : state.sum} ${
-    state.operator ? state.operator : ""
-  } ${state.currentNumber.length == 0 ? 0 : state.currentNumber}`;
+  updateDisplay();
 }
 
 function addOperator(e) {
+  if (state.display === state.sum) {
+    state.operator = e.target.value;
+    state.currentNumber = "";
+    updateDisplay();
+    return;
+  }
+
   state.sum = calculate();
-
   state.operator = e.target.value;
-
   state.currentNumber = "";
-  state.display = `${state.sum == 0 ? "" : state.sum} ${
-    state.operator ? state.operator : ""
-  } ${state.currentNumber.length == 0 ? 0 : state.currentNumber}`;
+  updateDisplay();
 }
 
 function reset() {
   state.currentNumber = "";
   state.sum = 0;
   state.operator = null;
-  state.display = `${state.sum == 0 ? "" : state.sum} ${
-    state.operator ? state.operator : ""
-  } ${state.currentNumber.length == 0 ? 0 : state.currentNumber}`;
+  updateDisplay();
 }
 
 function del() {
-  state.currentNumber = state.currentNumber.slice(0, -1);
+  if (state.display === state.sum) return;
 
-  state.display = `${state.sum == 0 ? "" : state.sum} ${
-    state.operator ? state.operator : ""
-  } ${state.currentNumber.length == 0 ? 0 : state.currentNumber}`;
+  state.currentNumber = state.currentNumber.slice(0, -1);
+  updateDisplay();
 }
 
 function equal() {
@@ -115,6 +115,12 @@ function calculate(operator = state.operator) {
   if (operator == "-") return state.sum - parseFloat(state.currentNumber);
 
   return parseFloat(state.currentNumber);
+}
+
+function updateDisplay() {
+  state.display = `${state.sum == 0 ? "" : state.sum}${
+    state.operator ? state.operator : ""
+  }${state.currentNumber.length == 0 ? 0 : state.currentNumber}`;
 }
 </script>
 
