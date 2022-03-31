@@ -72,14 +72,7 @@ function addNum(e) {
 }
 
 function addOperator(e) {
-  if (state.display === state.sum) {
-    state.operator = e.target.value;
-    state.currentNumber = "";
-    updateDisplay();
-    return;
-  }
-
-  state.sum = calculate();
+  if (state.display !== state.sum) state.sum = calculate();
   state.operator = e.target.value;
   state.currentNumber = "";
   updateDisplay();
