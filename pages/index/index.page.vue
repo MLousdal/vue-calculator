@@ -104,8 +104,9 @@ function changeTheme(value = themeSelector.value.value) {
 
 function addNum(num) {
   if (state.display === state.sum) return;
-  if (num instanceof PointerEvent || num instanceof MouseEvent)
+  if (num instanceof PointerEvent || num instanceof MouseEvent) {
     num = num.target.value;
+  }
 
   if (state.currentNumber == "0") {
     state.currentNumber = num;
@@ -124,8 +125,9 @@ function addOperator(operator) {
     return;
   }
   if (state.display !== state.sum) state.sum = calculate();
-  if (operator instanceof PointerEvent || operator instanceof MouseEvent)
+  if (operator instanceof PointerEvent || operator instanceof MouseEvent) {
     operator = operator.target.value;
+  }
 
   state.operator = operator;
   state.currentNumber = "0";
