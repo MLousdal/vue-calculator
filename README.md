@@ -6,8 +6,9 @@ This is a solution to the [Calculator app challenge on Frontend Mentor](https://
 
 - [Overview](#overview)
   - [The challenge](#the-challenge)
-  - [Screenshot](#screenshot)
+  - [Beyond the challenge](#beyond-the-challenge)
   - [Links](#links)
+  - [Screenshot](#screenshot)
   - [Built with](#built-with)
 
 ## Overview
@@ -19,15 +20,19 @@ Users should be able to:
 - See the size of the elements adjust based on their device's screen size
 - Perform mathematical operations like addition, subtraction, multiplication, and division
 - Adjust the color theme based on their preference
-- **Bonus**: Have their initial theme preference checked using `prefers-color-scheme` and have any additional changes saved in the browser
+- **Bonus**: Have their initial theme preference checked using `prefers-color-scheme`
 
-### Screenshot
-
-![Screenshot of the solution](./screenshot.png)
+### Beyond the challenge
+- Extra: Use the keyboard to use the calculator
+- Pressing the equals button works as expected, repeating the last operation
 
 ### Links
 
 - Live Site URL: [Vercel](https://vue-calculator-sable.vercel.app/)
+
+### Screenshot
+
+![Screenshot of the solution](./screenshot.png)
 
 ### Built with
 
