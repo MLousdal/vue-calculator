@@ -25,7 +25,7 @@ let state = reactive({
   currentNumber: "",
   sum: 0,
   operator: null,
-  display: "",
+  display: 0,
 });
 
 onMounted(() => {
@@ -37,8 +37,8 @@ onMounted(() => {
     window.matchMedia &&
     window.matchMedia("(prefers-color-scheme: light)").matches;
 
-  if (userPrefersDark) state.theme = 3;
-  if (userPrefersLight) state.theme = 1;
+  if (userPrefersDark) state.theme = 1;
+  if (userPrefersLight) state.theme = 2;
 
   changeTheme(state.theme);
 });
@@ -66,7 +66,9 @@ function changeTheme(value = themeSelector.value.value) {
 function addNum(e) {
   if (state.currentNumber == state.sum) state.currentNumber = "";
   state.currentNumber += e.target.value;
-  state.display = state.currentNumber;
+  state.display = `${state.sum == 0 ? "" : state.sum} ${
+    state.operator ? state.operator : ""
+  } ${state.currentNumber.length == 0 ? 0 : state.currentNumber}`;
 }
 
 function addOperator(e) {
@@ -75,24 +77,33 @@ function addOperator(e) {
   state.operator = e.target.value;
 
   state.currentNumber = "";
-  state.display = state.currentNumber;
+  state.display = `${state.sum == 0 ? "" : state.sum} ${
+    state.operator ? state.operator : ""
+  } ${state.currentNumber.length == 0 ? 0 : state.currentNumber}`;
 }
 
 function reset() {
   state.currentNumber = "";
   state.sum = 0;
   state.operator = null;
-  state.display = "";
+  state.display = `${state.sum == 0 ? "" : state.sum} ${
+    state.operator ? state.operator : ""
+  } ${state.currentNumber.length == 0 ? 0 : state.currentNumber}`;
 }
 
 function del() {
   state.currentNumber = state.currentNumber.slice(0, -1);
-  state.display = state.currentNumber;
+
+  state.display = `${state.sum == 0 ? "" : state.sum} ${
+    state.operator ? state.operator : ""
+  } ${state.currentNumber.length == 0 ? 0 : state.currentNumber}`;
 }
 
 function equal() {
   state.sum = calculate();
+  if (isNaN(state.sum)) state.sum = 0;
 
+  state.operator = null;
   state.currentNumber = "";
   state.display = state.sum;
 }
@@ -101,8 +112,7 @@ function calculate(operator = state.operator) {
   if (operator == "+") return state.sum + parseFloat(state.currentNumber);
   if (operator == "*") return state.sum * parseFloat(state.currentNumber);
   if (operator == "/") return state.sum / parseFloat(state.currentNumber);
-  if (state.sum !== 0 && operator == "-")
-    return state.sum - parseFloat(state.currentNumber);
+  if (operator == "-") return state.sum - parseFloat(state.currentNumber);
 
   return parseFloat(state.currentNumber);
 }
@@ -132,10 +142,10 @@ function calculate(operator = state.operator) {
       </div>
     </header>
     <output>
-      {{ state.display.length == 0 ? "0" : state.display }}
+      {{ state.display }}
     </output>
     <section class="keyboard">
-      <button value="7" @click="addNum">7</button>
+      <button value="7" @click="addNum" @keypress="addNum">7</button>
       <button value="8" @click="addNum">8</button>
       <button value="9" @click="addNum">9</button>
       <button class="del" @click="del">DEL</button>
