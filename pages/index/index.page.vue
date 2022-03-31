@@ -119,15 +119,15 @@ function addNum(num) {
 }
 
 function addOperator(operator) {
+  if (operator instanceof PointerEvent || operator instanceof MouseEvent) {
+    operator = operator.target.value;
+  }
   if (state.currentNumber == "0") {
     state.operator = operator;
     updateDisplay();
     return;
   }
   if (state.display !== state.sum) state.sum = calculate();
-  if (operator instanceof PointerEvent || operator instanceof MouseEvent) {
-    operator = operator.target.value;
-  }
 
   state.operator = operator;
   state.currentNumber = "0";
