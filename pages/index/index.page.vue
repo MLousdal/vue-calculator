@@ -117,6 +117,11 @@ function addNum(num) {
 }
 
 function addOperator(operator) {
+  if (state.currentNumber == "0") {
+    state.operator = operator;
+    updateDisplay();
+    return;
+  }
   if (state.display !== state.sum) state.sum = calculate();
   if (operator instanceof PointerEvent) operator = operator.target.value;
 
