@@ -22,7 +22,8 @@ const themeSelector = ref(null);
 
 let state = reactive({
   theme: 1,
-  currentNumber: "",
+  currentNumber: "0",
+  previousNumber: 0,
   sum: 0,
   operator: null,
   display: 0,
@@ -60,11 +61,17 @@ onMounted(() => {
       case "/":
         addOperator("/");
         break;
+      case ",":
+        addOperator(".");
+        break;
       case "Enter":
         equal();
         break;
       case "Escape":
         reset();
+        break;
+      case "Backspace":
+        del();
         break;
 
       default:
@@ -98,6 +105,13 @@ function changeTheme(value = themeSelector.value.value) {
 function addNum(num) {
   if (state.display === state.sum) return;
   if (num instanceof PointerEvent) num = num.target.value;
+
+  if (state.currentNumber == "0") {
+    state.currentNumber = num;
+    updateDisplay();
+    return;
+  }
+
   state.currentNumber += num;
   updateDisplay();
 }
@@ -107,12 +121,13 @@ function addOperator(operator) {
   if (operator instanceof PointerEvent) operator = operator.target.value;
 
   state.operator = operator;
-  state.currentNumber = "";
+  state.currentNumber = "0";
   updateDisplay();
 }
 
 function reset() {
-  state.currentNumber = "";
+  state.currentNumber = "0";
+  state.previousNumber = 0;
   state.sum = 0;
   state.operator = null;
   updateDisplay();
@@ -126,27 +141,31 @@ function del() {
 }
 
 function equal() {
+  if (state.display === state.sum) {
+    state.currentNumber = state.previousNumber;
+    calculate();
+  }
   state.sum = calculate();
   if (isNaN(state.sum)) state.sum = 0;
 
-  state.operator = null;
-  state.currentNumber = "";
+  state.currentNumber = "0";
   state.display = state.sum;
 }
 
 function calculate(operator = state.operator) {
+  state.previousNumber = parseFloat(state.currentNumber);
+
   if (operator == "+") return state.sum + parseFloat(state.currentNumber);
   if (operator == "*") return state.sum * parseFloat(state.currentNumber);
   if (operator == "/") return state.sum / parseFloat(state.currentNumber);
   if (operator == "-") return state.sum - parseFloat(state.currentNumber);
-
   return parseFloat(state.currentNumber);
 }
 
 function updateDisplay() {
   state.display = `${state.sum == 0 ? "" : state.sum}${
     state.operator ? state.operator : ""
-  }${state.currentNumber.length == 0 ? 0 : state.currentNumber}`;
+  }${state.currentNumber}`;
 }
 </script>
 
