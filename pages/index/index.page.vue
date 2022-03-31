@@ -63,6 +63,9 @@ onMounted(() => {
       case "Enter":
         equal();
         break;
+      case "Escape":
+        reset();
+        break;
 
       default:
         break;
