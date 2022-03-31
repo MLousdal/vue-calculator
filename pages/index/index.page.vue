@@ -41,6 +41,34 @@ onMounted(() => {
   if (userPrefersLight) state.theme = 2;
 
   changeTheme(state.theme);
+
+  document.addEventListener("keydown", (e) => {
+    if (!isNaN(Number(e.key))) {
+      addNum(e.key);
+    }
+
+    switch (e.key) {
+      case "+":
+        addOperator("+");
+        break;
+      case "-":
+        addOperator("-");
+        break;
+      case "*":
+        addOperator("*");
+        break;
+      case "/":
+        addOperator("/");
+        break;
+      case "Enter":
+        equal();
+        break;
+
+      default:
+        break;
+    }
+  });
+
   updateDisplay();
 });
 
@@ -64,16 +92,18 @@ function changeTheme(value = themeSelector.value.value) {
   }
 }
 
-function addNum(e) {
+function addNum(num) {
   if (state.display === state.sum) return;
-
-  state.currentNumber += e.target.value;
+  if (num instanceof PointerEvent) num = num.target.value;
+  state.currentNumber += num;
   updateDisplay();
 }
 
-function addOperator(e) {
+function addOperator(operator) {
   if (state.display !== state.sum) state.sum = calculate();
-  state.operator = e.target.value;
+  if (operator instanceof PointerEvent) operator = operator.target.value;
+
+  state.operator = operator;
   state.currentNumber = "";
   updateDisplay();
 }
@@ -144,7 +174,7 @@ function updateDisplay() {
       {{ state.display }}
     </output>
     <section class="keyboard">
-      <button value="7" @click="addNum" @keypress="addNum">7</button>
+      <button value="7" @click="addNum">7</button>
       <button value="8" @click="addNum">8</button>
       <button value="9" @click="addNum">9</button>
       <button class="del" @click="del">DEL</button>
