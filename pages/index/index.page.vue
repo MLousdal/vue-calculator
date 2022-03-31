@@ -25,6 +25,7 @@ let state = reactive({
   currentNumber: "",
   sum: 0,
   operator: null,
+  display: "",
 });
 
 onMounted(() => {
@@ -65,41 +66,45 @@ function changeTheme(value = themeSelector.value.value) {
 function addNum(e) {
   if (state.currentNumber == state.sum) state.currentNumber = "";
   state.currentNumber += e.target.value;
+  state.display = state.currentNumber;
 }
 
 function addOperator(e) {
-  state.operator = e.target.value;
-
   state.sum = calculate();
 
+  state.operator = e.target.value;
+
   state.currentNumber = "";
-  console.log(state.sum);
+  state.display = state.currentNumber;
 }
 
 function reset() {
   state.currentNumber = "";
   state.sum = 0;
   state.operator = null;
+  state.display = "";
 }
 
 function del() {
   state.currentNumber = state.currentNumber.slice(0, -1);
+  state.display = state.currentNumber;
 }
 
 function equal() {
   state.sum = calculate();
-  state.currentNumber = state.sum;
+
+  state.currentNumber = "";
+  state.display = state.sum;
 }
 
 function calculate(operator = state.operator) {
   if (operator == "+") return state.sum + parseFloat(state.currentNumber);
-  if (state.sum !== 0) {
-    if (operator == "-") return state.sum - parseFloat(state.currentNumber);
-  } else {
-    return parseFloat(state.currentNumber);
-  }
   if (operator == "*") return state.sum * parseFloat(state.currentNumber);
   if (operator == "/") return state.sum / parseFloat(state.currentNumber);
+  if (state.sum !== 0 && operator == "-")
+    return state.sum - parseFloat(state.currentNumber);
+
+  return parseFloat(state.currentNumber);
 }
 </script>
 
@@ -127,7 +132,7 @@ function calculate(operator = state.operator) {
       </div>
     </header>
     <output>
-      {{ state.currentNumber.length == 0 ? "0" : state.currentNumber }}
+      {{ state.display.length == 0 ? "0" : state.display }}
     </output>
     <section class="keyboard">
       <button value="7" @click="addNum">7</button>
